@@ -3,93 +3,62 @@
     {
       "name": "group a",
       "teams": [],
-      "winner": 3,
-      "second": 15,
-      "third": ""
+      "winner": 2,
+      "second": 14
     },
     {
       "name": "group b",
       "teams": [],
-      "winner": 1,
-      "second": 16,
-      "third": ""
+      "winner": 0,
+      "second": 15
     },
     {
       "name": "group c",
       "teams": [],
-      "winner": 13,
-      "second": 4,
-      "third": ""
+      "winner": 12,
+      "second": 3
     },
     {
       "name": "group d",
       "teams": [],
-      "winner": 11,
-      "second": 7,
-      "third": ""
+      "winner": 10,
+      "second": 6
     },
     {
       "name": "group e",
       "teams": [],
-      "winner": 9,
-      "second": 8,
-      "third": ""
+      "winner": 8,
+      "second": 7
     },
     {
       "name": "group f",
       "teams": [],
-      "winner": 5,
-      "second": 12,
-      "third": "",
-      "fourth": ""
+      "winner": 4,
+      "second": 11
     }
   ],
-  "thirdTeams": ["", "", "", "", "", ""],
-  "thirdPositions": ["", "", "", "", "", ""],
+  "thirdTeams": [null, null, null, null, null, null],
+  "thirdPositions": [],
   "secondRound": [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    ""
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
   ],
-  "quarters": [
-    { "name": "quarter1", "home": "", "away": "" },
-    {
-      "name": "quarter2",
-      "home": "",
-      "away": ""
-    },
-    {
-      "name": "quarter3",
-      "home": "",
-      "away": ""
-    },
-    {
-      "name": "quarter4",
-      "home": "",
-      "away": ""
-    }
-  ],
-  "semis": [
-    { "name": "semi1", "home": "", "away": "" },
-    {
-      "name": "semi2",
-      "home": "",
-      "away": ""
-    }
-  ],
-  "final": [{ "name": "final", "home": "", "away": "" }],
-  "winner": []
+  "quarters": [null, null, null, null, null, null, null, null],
+  "semis": [null, null, null, null],
+  "final": [null, null],
+  "champions": [null]
 }
