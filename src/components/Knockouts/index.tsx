@@ -1,7 +1,8 @@
-import Flag from "react-flags";
+import { Flag } from '..';
+import './styles.scss';
 
 export default function Knockouts({ teams, handleClick, nextRound, title, roundIndex, positions }) {
-    const formatTeams = () => {
+    const formatTeams = (teams) => {
         const res = [];
         for (let i = 0; i < teams.length; i += 2) {
             res.push([teams[i], teams[i + 1]])
@@ -17,17 +18,14 @@ export default function Knockouts({ teams, handleClick, nextRound, title, roundI
             <div className={`knockout-round-container bracket-${roundIndex}`}>
                 {formattedTeams.map((match, index) => {
                     return (
-                        <div className="knockout-match bracket-team">
+                        <div key={`knockout-stage-${roundIndex}-${index}}`} className="knockout-match bracket-team">
                             <div>
                                 {match[0] &&
                                     <div className="knockout-team" onClick={() => handleClick(match[0], index, nextRound)}>
                                         <div className="knockout-team-name">
                                             <Flag
-                                                name={match[0].flag}
-                                                format="svg"
-                                                width="40"
-                                                basePath="/img/flags"
-                                                alt={`${match[0].name} flag`} />
+                                                team={match[0]}
+                                                width="40px" />
                                             <div>{match[0].name}</div>
                                         </div>
                                         <div className="knockout-selector">
@@ -42,11 +40,8 @@ export default function Knockouts({ teams, handleClick, nextRound, title, roundI
                                     <div className="knockout-team" onClick={() => handleClick(match[1], index, nextRound)}>
                                         <div className="knockout-team-name">
                                             <Flag
-                                                name={match[1].flag}
-                                                format="svg"
-                                                width="40"
-                                                basePath="/img/flags"
-                                                alt={`${match[1].name} flag`} />
+                                                team={match[1]}
+                                                width="40px" />
                                             <div >{match[1].name}</div>
                                         </div>
                                         <div className="knockout-selector">
