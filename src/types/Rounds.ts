@@ -7,4 +7,3 @@ export type Rounds =
   | "semis"
   | "final"
   | "champions";
-  
