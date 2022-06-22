@@ -16,7 +16,9 @@ import { Positions } from "./types/Positions";
 import { Rounds } from "./types/Rounds";
 
 function App() {
-  const [positions, setPositions] = useState<Positions>(data);
+  const [positions, setPositions] = useState<Positions>(
+    JSON.parse(JSON.stringify(data))
+  );
   const [teams] = useState(groupTeams(teamsData.teams));
   const [showShare, setShowShare] = useState(false);
 
@@ -27,15 +29,17 @@ function App() {
     if (scenarioString && scenarioString.length === 25)
       decodeScenario(
         scenarioString,
-        { ...positions },
+        JSON.parse(JSON.stringify(positions)),
         teams,
         calculateSecondRound,
         calculateThirdPlaceIntoKnockout
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const handleGroupSelect = (team: Team, groupIndex: number) => {
-    const group: Team[] = [...positions.groups[groupIndex].teams];
+    const newPositions = JSON.parse(JSON.stringify(positions));
+    const group: Team[] = newPositions.groups[groupIndex].teams;
     if (group.some((el) => el.name === team.name)) {
       if (group[group.length - 1].name === team.name) {
         group.pop();
@@ -47,9 +51,27 @@ function App() {
     } else {
       group.push(team);
     }
-    const newPositions = { ...positions };
     newPositions.groups[groupIndex].teams = group;
     calculateSecondRound(newPositions);
+  };
+
+  const updateFutureRounds = (team: Team, round: string) => {
+    const newPositions = JSON.parse(JSON.stringify(positions));
+    if (team) {
+      const rounds = ["secondRound", "quarters", "semis", "final", "champions"];
+      const roundStart = rounds.findIndex((el) => el === round);
+      for (let i = roundStart; i < rounds.length; i++) {
+        const index = newPositions[rounds[i]].findIndex((el: Team) => {
+          if (el) {
+            return el.name === team.name;
+          } else return false;
+        });
+        if (index !== -1) {
+          newPositions[rounds[i]][index] = null;
+        }
+      }
+    }
+    return newPositions;
   };
 
   const calculateSecondRound = (newPositions: Positions) => {
@@ -100,7 +122,7 @@ function App() {
       }
     }
 
-    const newPositions = { ...positions };
+    const newPositions = JSON.parse(JSON.stringify(positions));
     newPositions.secondRound[1] = null;
     newPositions.secondRound[5] = null;
     newPositions.secondRound[9] = null;
@@ -132,8 +154,13 @@ function App() {
     setPositions(newPositions);
   };
 
-  const handleKnockoutClick = (team: Team, index: number, round: string) => {
-    const newPositions = { ...positions };
+  const handleKnockoutClick = (
+    team: Team,
+    index: number,
+    round: string,
+    opponent: Team
+  ) => {
+    const newPositions = updateFutureRounds(opponent, round);
     newPositions[round.toString() as Rounds][index] = team;
     setPositions(newPositions);
   };
@@ -196,13 +223,19 @@ function App() {
             positions={positions["champions"]}
           />
           {positions.champions[0] && (
-            <Champions champions={positions.champions[0]} />
+            <Champions
+              champions={positions.champions[0]}
+              setShowShare={setShowShare}
+            />
           )}
         </div>
       </Collapsible>
       {positions.champions[0] && (
-        <button className="share" onClick={() => setShowShare(true)}>
-          Share
+        <button
+          className="share share-mobile"
+          onClick={() => setShowShare(true)}
+        >
+          Share Prediction
         </button>
       )}
       {showShare && (
@@ -212,6 +245,14 @@ function App() {
           teams={teams}
         />
       )}
+      <div>
+        <button
+          className="reset"
+          onClick={() => setPositions(JSON.parse(JSON.stringify(data)))}
+        >
+          Reset Prediction
+        </button>
+      </div>
     </div>
   );
 }
