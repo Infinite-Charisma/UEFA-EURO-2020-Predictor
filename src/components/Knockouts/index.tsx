@@ -1,61 +1,71 @@
-import { Flag } from '..';
-import './styles.scss';
+import { KnockoutMatch } from "..";
+import { Rounds } from "../../types/Rounds";
+import { Team } from "../../types/Team";
+import { formatKnockoutTeams } from "../../utils";
+import "./styles.scss";
 
-export default function Knockouts({ teams, handleClick, nextRound, title, roundIndex, positions }) {
-    const formatTeams = (teams) => {
-        const res = [];
-        for (let i = 0; i < teams.length; i += 2) {
-            res.push([teams[i], teams[i + 1]])
-        }
-        return res
-    }
+interface IKnockouts {
+  teams: (Team | null)[];
+  handleClick: (
+    team: Team,
+    index: number,
+    round: string,
+    opponent: Team
+  ) => void;
+  nextRound: Rounds;
+  title: string;
+  roundIndex: string;
+  positions: (Team | null)[];
+}
 
-    const formattedTeams = formatTeams(teams)
-
-    return (
-        <div className="knockout-stage" >
-            <h2>{title}</h2>
-            <div className={`knockout-round-container bracket-${roundIndex}`}>
-                {formattedTeams.map((match, index) => {
-                    return (
-                        <div key={`knockout-stage-${roundIndex}-${index}}`} className="knockout-match bracket-team">
-                            <div>
-                                {match[0] &&
-                                    <div className="knockout-team" onClick={() => handleClick(match[0], index, nextRound)}>
-                                        <div className="knockout-team-name">
-                                            <Flag
-                                                team={match[0]}
-                                                width="40px" />
-                                            <div>{match[0].name}</div>
-                                        </div>
-                                        <div className="knockout-selector">
-                                            {positions[nextRound].filter(el => el !== null).find(el => el.name === match[0].name) && <div>&#x2714;</div>}
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                            {(match[0] || match[1]) && <div>v</div>}
-                            <div>
-                                {match[1] &&
-                                    <div className="knockout-team" onClick={() => handleClick(match[1], index, nextRound)}>
-                                        <div className="knockout-team-name">
-                                            <Flag
-                                                team={match[1]}
-                                                width="40px" />
-                                            <div >{match[1].name}</div>
-                                        </div>
-                                        <div className="knockout-selector">
-                                            {positions[nextRound].filter(el => el !== null).find(el => el.name === match[1].name) && <div>&#x2714;</div>}
-
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-                    )
-                })}
+export default function Knockouts({
+  teams,
+  handleClick,
+  nextRound,
+  title,
+  roundIndex,
+  positions,
+}: IKnockouts) {
+  const formattedTeams = formatKnockoutTeams([...teams]);
+  return (
+    <div className="knockout-stage">
+      <h2>{title}</h2>
+      <div className={`knockout-round-container bracket-${roundIndex}`}>
+        {formattedTeams.map((match, index) => {
+          return (
+            <div
+              key={`knockout-stage-${roundIndex}-${index}}`}
+              className="knockout-match bracket-team"
+            >
+              <div>
+                {match[0] && match[1] && (
+                  <KnockoutMatch
+                    match={match[0]}
+                    index={index}
+                    nextRound={nextRound}
+                    round={positions}
+                    handleClick={handleClick}
+                    opponent={match[1]}
+                  />
+                )}
+              </div>
+              {match[0] && match[1] && <div>v</div>}
+              <div>
+                {match[1] && match[0] && (
+                  <KnockoutMatch
+                    match={match[1]}
+                    index={index}
+                    nextRound={nextRound}
+                    round={positions}
+                    handleClick={handleClick}
+                    opponent={match[0]}
+                  />
+                )}
+              </div>
             </div>
-        </div>
-    )
+          );
+        })}
+      </div>
+    </div>
+  );
 }
