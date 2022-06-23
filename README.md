@@ -11,7 +11,7 @@ A prediction/wall chart app for the UEFA 2020/2021 European Championship finals.
 ## Demo
 
 ```
-
+http://uefa-euro-2020-predictor.vercel.app
 ```
 
 ## Tech Stack
